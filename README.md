@@ -1,5 +1,40 @@
 # Word2Vec
 
+## Optimizations
+
+### Array Construction
+
+```python
+import numpy as np
+import time
+
+iterations = 10000
+array_size = 80000
+index = 3
+
+start = time.time()
+for _ in range(iterations):
+    a = [0 for i in range(array_size)]
+    a[index] = 0
+    a = np.array(a)
+
+end = time.time()
+print(f'Array to Numpy: {end - start}')
+
+start = time.time()
+for _ in range(iterations):
+    a = np.zeros(array_size, dtype=int)
+    a[index] = 1
+
+end = time.time()
+print(f'Numpy Zeroes: {end - start}')
+```
+
+Returns:
+```
+Array to Numpy: 60.99235486984253
+Numpy Zeroes: 0.1362009048461914
+```
 
 ## Works Cited
 

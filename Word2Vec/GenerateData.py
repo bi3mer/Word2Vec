@@ -14,7 +14,7 @@ def encode_indexed_data(x, vocabulary_size):
     new_x = []
 
     for index in x:
-        new_val = [0 for i in range(vocabulary_size)]
+        new_val = np.zeros(vocabulary_size, dtype=int)
         new_val[index] = 1
         new_x.append(new_val)
 
