@@ -34,3 +34,6 @@ class WordEncodings():
             log.error('Word not found. Returned 0.', verbose=self.verbose)
 
         return self.word_to_int[word]
+
+    def vocabulary_size(self):
+        return self.index
