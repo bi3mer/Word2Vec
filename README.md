@@ -48,7 +48,7 @@ model.save_model('model_dir')
 True
 ```
 
-### Get Nearest Neighbors
+### K Nearest Neighbors
 
 ```python
 >>> import numpy as np
