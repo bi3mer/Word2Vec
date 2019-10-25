@@ -22,7 +22,7 @@ corpus.append('the boy went to the store , and bought beef .'.split(' '))
 
 config = Word2Vec.Config()
 encodings, x, y = Word2Vec.generate_encoded_data(corpus, config)
-model = Word2Vec.Model(config, encodings)
+model = Word2Vec.SkipGram(config, encodings)
 model.train(x, y)
 
 model.save_all_embeddings('embeddings_dir')
@@ -52,7 +52,7 @@ True
 
 ## Optimizations
 
-### Array Construction
+### Array Construction for Encodings
 
 ```python
 import numpy as np

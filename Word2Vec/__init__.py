@@ -1,4 +1,4 @@
-from .Model import Model, load_embeddings, load_model
+from .SkipGram import SkipGram, load_embeddings, load_model
 from .GenerateData import generate_encoded_data
 from .NearestNeighbor import NearestNeighbor
 from .Config import Config

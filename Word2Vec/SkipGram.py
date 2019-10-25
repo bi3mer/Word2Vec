@@ -64,7 +64,7 @@ def backwards_propagation(model, error, hidden_layer, vector):
     model.w1 = model.w1 - (model.config.learning_rate * dl_dw1)
     model.w2 = model.w2 - (model.config.learning_rate * dl_dw2)
 
-class Model():
+class SkipGram():
     def __init__(self, config, encodings):
         self.encodings = encodings
         self.config = config
