@@ -1,7 +1,7 @@
 from . import log
 
 class WordEncodings():
-    def __init__(self, verbose=True):
+    def __init__(self, config, verbose=True):
         '''
         @type verbose: bool
         @param verbose: boolean for whether or not there will be log output on error.
@@ -9,10 +9,14 @@ class WordEncodings():
         Unknown words are returned as 0
         '''
         self.verbose = verbose
+        self.config = config
 
-        self.word_to_int = {'unknown': 0}
+        self.word_to_int = {config.unknown_word: 0}
         self.int_to_word = [0]
         self.index = 1
+
+    def word_in_vocab(self, word):
+        return word in self.word_to_int
 
     def add_word(self, word):
         if word not in self.word_to_int:
@@ -24,7 +28,7 @@ class WordEncodings():
         if index >= self.index or index < 0:
             log.error('Index not within bounds of encodings. Returned "unknown".', verbose=self.verbose)
 
-            return 'unknown'
+            return self.config.unknown_word
 
         print(index, self.index, len(self.int_to_word))
         return self.int_to_word[index]

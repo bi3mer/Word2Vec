@@ -27,8 +27,9 @@ def load_embeddings(directory_path):
 
     embeddings = load_pickle(os.path.join(directory_path, 'embeddings.pkl'))
     encodings = load_pickle(os.path.join(directory_path, 'encoding.pkl'))
+    config = load_pickle(os.path.join(directory_path, 'config.pkl'))
 
-    return embeddings, encodings
+    return embeddings, encodings, config
 
 def load_model(directory_path):
     if not os.path.isdir(directory_path):
@@ -40,7 +41,7 @@ def load_model(directory_path):
     w1 = load_pickle(os.path.join(directory_path, 'w1.pkl'))
     w2 = load_pickle(os.path.join(directory_path, 'w2.pkl'))
 
-    model = Model(config, encodings)
+    model = SkipGram(config, encodings)
     model.w1 = w1
     model.w2 = w2
 
@@ -119,6 +120,10 @@ class SkipGram():
 
         f = open(os.path.join(embeddings_directory, 'encoding.pkl'), 'wb')
         pickle.dump(self.encodings, f)
+        f.close()
+
+        f = open(os.path.join(embeddings_directory, 'config.pkl'), 'wb')
+        pickle.dump(self.config, f)
         f.close()
 
     def save_model(self, model_directory):

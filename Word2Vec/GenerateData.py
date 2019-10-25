@@ -33,7 +33,7 @@ def generate_encoded_data(tokenized_sentences, config, verbose=True):
     x = []
     y = []
     
-    encodings = WordEncodings(verbose=verbose)
+    encodings = WordEncodings(config, verbose=verbose)
     encodings.add_word(config.start_of_sentence_token)
     encodings.add_word(config.end_of_sentence_token)
 

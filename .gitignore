@@ -107,8 +107,7 @@ venv.bak/
 .vscode/
 
 # testing files and directories
-test_load.py
-test_create.py
+test_*.py
 embeddings_dir/
 model_dir/
 *.pkl

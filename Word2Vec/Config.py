@@ -19,3 +19,4 @@ class Config():
 
         self.start_of_sentence_token = '<start>'
         self.end_of_sentence_token = '<end>'
+        self.unknown_word = '<UNK>'
