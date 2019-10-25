@@ -57,10 +57,6 @@ corpus.append('i imagine the day that I can run again , and it will be brilliant
 corpus.append('the boy went to the store , and bought beef .'.split(' '))
 
 config = Word2Vec.Config()
-config.window_size = 3
-config.epochs = 100
-config.use_start_and_end_tokens = False
-
 encodings, x, y = Word2Vec.generate_encoded_data(corpus, config)
 model = Word2Vec.Model(config, encodings)
 model.train(x, y)
