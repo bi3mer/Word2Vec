@@ -37,3 +37,9 @@ class WordEncodings():
 
     def vocabulary_size(self):
         return self.index
+
+    def indexes(self):
+        return [i for i in range(self.index)]
+
+    def words(self):
+        return self.word_to_int.keys()
