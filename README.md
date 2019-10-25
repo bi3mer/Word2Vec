@@ -1,4 +1,4 @@
-# Word2Vec
+# Word2Vec Skip-Grams
 
 ## TODO
 
@@ -8,6 +8,47 @@
     * Optimize so loss and accuracy are only calculated on valid modulo
 * Improve naming of variables in backwards propagation and forward functions
 * Implement Nearest Neighbor
+
+## Samples
+
+### Create a Model
+
+```python
+import Word2Vec
+
+corpus = []
+corpus.append('i imagine the day that I can run again , and it will be brilliant .'.split(' '))
+corpus.append('the boy went to the store , and bought beef .'.split(' '))
+
+config = Word2Vec.Config()
+encodings, x, y = Word2Vec.generate_encoded_data(corpus, config)
+model = Word2Vec.Model(config, encodings)
+model.train(x, y)
+
+model.save_all_embeddings('embeddings_dir')
+model.save_model('model_dir')
+```
+
+
+### Load Saved Embeddings
+
+```python
+>>> import Word2Vec
+>>> embeddings, encodings = Word2Vec.load_embeddings('embeddings_dir')
+>>> encodings.get_index('imagine')
+4
+```
+
+### Load and Test Saved Model
+
+```python
+>>> import numpy as np
+>>> import Word2Vec
+>>> model = Word2Vec.load_model('model_dir')
+>>> embeddings, encodings = Word2Vec.load_embeddings('embeddings_dir')
+>>> np.array_equal(model.get_embedding('imagine'), embeddings['imagine'])
+True
+```
 
 ## Optimizations
 
@@ -39,63 +80,9 @@ end = time.time()
 print(f'Numpy Zeroes: {end - start}')
 ```
 
-Returns:
 ```
 Array to Numpy: 60.99235486984253
 Numpy Zeroes: 0.1362009048461914
-```
-
-## Samples
-
-### Create a Model
-
-```python
-import Word2Vec
-
-corpus = []
-corpus.append('i imagine the day that I can run again , and it will be brilliant .'.split(' '))
-corpus.append('the boy went to the store , and bought beef .'.split(' '))
-
-config = Word2Vec.Config()
-encodings, x, y = Word2Vec.generate_encoded_data(corpus, config)
-model = Word2Vec.Model(config, encodings)
-model.train(x, y)
-
-model.save_all_embeddings('embeddings_dir')
-model.save_model('model_dir')
-```
-
-
-### Load Saved Embeddings
-
-```python
-import numpy as np
-import Word2Vec
-
-embeddings, encodings = Word2Vec.load_embeddings('embeddings_dir')
-
-print(encodings.get_index('boy'))
-```
-
-```
-19
-```
-
-### Load and Test Saved Model
-
-```python
-import numpy as np
-import Word2Vec
-
-model = Word2Vec.load_model('model_dir')
-embeddings, encodings = Word2Vec.load_embeddings('embeddings_dir')
-
-vectors_the_same = np.array_equal(model.get_embedding('boy'), embeddings['boy'])
-print(f'Vector from model loading and embedding loading are the same: {vectors_the_same}')
-```
-
-```
-Vector from model loading and embedding loading are the same: True
 ```
 
 ## Works Cited
