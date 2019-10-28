@@ -1,4 +1,6 @@
 from .WordEncodings import WordEncodings
+
+from tqdm import tqdm
 import numpy as np
 
 def encode_indexed_data(x, vocabulary_size):
@@ -13,7 +15,7 @@ def encode_indexed_data(x, vocabulary_size):
     '''
     new_x = []
 
-    for index in x:
+    for index in tqdm(x, desc='encoding indexed data'):
         new_val = np.zeros(vocabulary_size, dtype=int)
         new_val[index] = 1
         new_x.append(new_val)
@@ -42,7 +44,7 @@ def generate_encoded_data(tokenized_sentences, config, verbose=True):
 
     window_size = config.window_size
 
-    for sentence in tokenized_sentences:
+    for sentence in tqdm(tokenized_sentences, desc='reading sentences'):
         sentence_length = len(sentence)
 
         for i in range(sentence_length):

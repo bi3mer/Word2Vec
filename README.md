@@ -24,15 +24,15 @@ encodings, x, y = Word2Vec.generate_encoded_data(corpus, config)
 model = Word2Vec.SkipGram(config, encodings)
 model.train(x, y)
 
-model.save_all_embeddings('embeddings_dir')
-model.save_model('model_dir')
+Word2Vec.IO.save_all_embeddings(model, 'embeddings_dir')
+Word2Vec.IO.save_model(model, 'model_dir')
 ```
 
 ### Load Saved Embeddings
 
 ```python
 >>> import Word2Vec
->>> embeddings, encodings, config = Word2Vec.load_embeddings('embeddings_dir')
+>>> embeddings, encodings, config = Word2Vec.IO.load_embeddings('embeddings_dir')
 >>> encodings.get_index('imagine')
 4
 ```
@@ -42,7 +42,7 @@ model.save_model('model_dir')
 ```python
 >>> import numpy as np
 >>> import Word2Vec
->>> model = Word2Vec.load_model('model_dir')
+>>> model = Word2Vec.IO.load_model('model_dir')
 >>> embeddings, encodings = Word2Vec.load_embeddings('embeddings_dir')
 >>> np.array_equal(model.get_embedding('imagine'), embeddings['imagine'])
 True
@@ -53,7 +53,7 @@ True
 ```python
 >>> import numpy as np
 >>> import Word2Vec
->>> embeddings, encodings, config = Word2Vec.load_embeddings('embeddings_dir')
+>>> embeddings, encodings, config = Word2Vec.IO.load_embeddings('embeddings_dir')
 >>> neighbors = Word2Vec.NearestNeighbor(embeddings, encodings, config)
 >>> neighbors.nearest_neighbors('day', count=3)
 [(0.299554492104162, 'the'), (0.46842916371794735, 'imagine'), (0.5892674981281726, 'went')]

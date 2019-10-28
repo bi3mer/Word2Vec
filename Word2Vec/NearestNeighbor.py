@@ -25,6 +25,8 @@ class NearestNeighbor():
 
         # TODO: is it faster to not have the the string comparision and instead always
         #       remove the first element of the array which will have a distance of 0
+        # TODO: implement faster solution than the heap where it only keeps track of K
+        #       values which should vastly reduce the number of operations required.
         for w in self.embeddings:
             if w == word:
                 continue
