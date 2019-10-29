@@ -1,9 +1,11 @@
 from .WordEncodings import WordEncodings
+from .util import bytes_to_gb
+from . import log
 
 from tqdm import tqdm
-import numpy as np
+import torch
 
-def encode_indexed_data(x, vocabulary_size):
+def encode_indexed_data_point(index, vocabulary_size):
     '''
     for every input X it returns an array of the vocabulary size where 1 of the
     values is 1 for the word it represents and the remaining values are 0
@@ -13,22 +15,10 @@ def encode_indexed_data(x, vocabulary_size):
     @type vocabulary_size: int
     @param vocabulary_size: total number of words found
     '''
-    new_x = []
-    length = len(x)
-    bar = tqdm(total=length, desc='encoding indexed data')
+    indexed = torch.zeros(vocabulary_size)
+    indexed[index] = 1
 
-    while length > 0:
-        length -= 1
-        index = x.pop()
-        bar.update(1)
-        
-        new_val = np.zeros(vocabulary_size, dtype=int)
-        new_val[index] = 1
-        new_x.append(new_val)
-
-        del index
-
-    return np.array(new_x)
+    return indexed
 
 def generate_indexed_data(tokenized_sentences, config, verbose=True):
     '''
@@ -52,11 +42,11 @@ def generate_indexed_data(tokenized_sentences, config, verbose=True):
 
     window_size = config.window_size
 
-    for sentence in tqdm(tokenized_sentences, desc='reading sentences    '):
+    for sentence in tqdm(tokenized_sentences, desc='reading sentences'):
         sentence_length = len(sentence)
 
         for i in range(sentence_length):
-            word = sentence[i]
+            word = sentence[i].lower()
             encodings.add_word(word)
             word_index = encodings.get_index_confident(word)
 
@@ -67,14 +57,14 @@ def generate_indexed_data(tokenized_sentences, config, verbose=True):
                 if j < 0:
                     if config.use_start_and_end_tokens:
                         x.append(start_of_sentence_index)
-                        y.append(word_index)
+                        y.append(torch.tensor([word_index]))
                 elif j >= sentence_length:
                     if config.use_start_and_end_tokens:
                         x.append(end_of_sentence_index)
-                        y.append(word_index)
+                        y.append(torch.tensor([word_index]))
                 else:
                     encodings.add_word(sentence[j])
                     x.append(encodings.get_index_confident(sentence[j]))
-                    y.append(word_index)
+                    y.append(torch.tensor([word_index]))
     
-    return encodings, x, np.array(y)
+    return encodings, x, y

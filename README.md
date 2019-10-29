@@ -20,9 +20,8 @@ corpus.append('i imagine the day that I can run again , and it will be brilliant
 corpus.append('the boy went to the store , and bought beef .'.split(' '))
 
 config = Word2Vec.Config()
-encodings, x, y = Word2Vec.generate_indexed_data(corpus, config)
-x = Word2Vec.encode_indexed_data(x, encodings.vocabulary_size())
 
+encodings, x, y = Word2Vec.generate_indexed_data(corpus, config)
 model = Word2Vec.SkipGram(config, encodings)
 model.train(x, y)
 
@@ -39,7 +38,7 @@ Word2Vec.IO.save_model(model, 'model_dir')
 4
 ```
 
-### Load and Test Saved Model
+### Load and Test Saved Model 
 
 ```python
 >>> import numpy as np
@@ -62,6 +61,8 @@ True
 ```
 
 ## Optimizations
+
+Current Best: 435.25it/s
 
 ### Array Construction for Encodings
 
