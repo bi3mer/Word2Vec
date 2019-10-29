@@ -57,14 +57,14 @@ def generate_indexed_data(tokenized_sentences, config, verbose=True):
                 if j < 0:
                     if config.use_start_and_end_tokens:
                         x.append(start_of_sentence_index)
-                        y.append(torch.tensor([word_index]))
+                        y.append(torch.tensor([word_index], dtype=torch.long))
                 elif j >= sentence_length:
                     if config.use_start_and_end_tokens:
                         x.append(end_of_sentence_index)
-                        y.append(torch.tensor([word_index]))
+                        y.append(torch.tensor([word_index], dtype=torch.long))
                 else:
                     encodings.add_word(sentence[j])
                     x.append(encodings.get_index_confident(sentence[j]))
-                    y.append(torch.tensor([word_index]))
+                    y.append(torch.tensor([word_index], dtype=torch.long))
     
     return encodings, x, y

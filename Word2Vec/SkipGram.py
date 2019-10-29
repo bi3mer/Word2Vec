@@ -49,7 +49,7 @@ class SkipGram():
             print(f'Epoch {epoch} loss={loss_value/input_size}')
 
     def get_embedding(self, word):
-        vector = encode_indexed_data_point(self.encodings.get_index(word), self.vocabulary_size)
+        vector = encode_indexed_data_point(self.encodings.get_index(word), self.config.dtype, self.vocabulary_size)
         return torch.matmul(self.w1, vector).data
 
     def get_all_embeddings(self):

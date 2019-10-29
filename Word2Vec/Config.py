@@ -23,4 +23,4 @@ class Config():
         self.end_of_sentence_token = '<end>'
         self.unknown_word = '<UNK>'
 
-        self.dtype = torch.cuda.float if torch.cuda.is_available() else torch.float
+        self.dtype = torch.float32
