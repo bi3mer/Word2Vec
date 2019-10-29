@@ -45,7 +45,7 @@ def load_model(directory_path):
 
     return model
 
-def save_all_embeddings(model, embeddings_directory):
+def save_embeddings(model, embeddings_directory):
     '''
     This will save the results of `get_all_embeddings`
     '''

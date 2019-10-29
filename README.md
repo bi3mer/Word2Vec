@@ -24,7 +24,7 @@ encodings, x, y = Word2Vec.generate_encoded_data(corpus, config)
 model = Word2Vec.SkipGram(config, encodings)
 model.train(x, y)
 
-Word2Vec.IO.save_all_embeddings(model, 'embeddings_dir')
+Word2Vec.IO.save_embeddings(model, 'embeddings_dir')
 Word2Vec.IO.save_model(model, 'model_dir')
 ```
 
