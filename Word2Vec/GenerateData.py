@@ -1,8 +1,9 @@
 from .WordEncodings import WordEncodings
 from .util import bytes_to_gb
+from .UniGram import UniGram
 from . import log
 
-from tqdm import tqdm
+from tqdm import tqdm, trange
 import torch
 
 def encode_indexed_data_point(index, dtype, vocabulary_size):
@@ -33,6 +34,8 @@ def generate_indexed_data(tokenized_sentences, config, verbose=True):
     x = []
     y = []
     
+    unigram = UniGram()
+
     encodings = WordEncodings(config, verbose=verbose)
     encodings.add_word(config.start_of_sentence_token)
     encodings.add_word(config.end_of_sentence_token)
@@ -42,13 +45,26 @@ def generate_indexed_data(tokenized_sentences, config, verbose=True):
 
     window_size = config.window_size
 
+    for i in trange(len(tokenized_sentences), desc='building unigram '):
+        sentence_length = len(tokenized_sentences[i])
+
+        for j in range(sentence_length):
+            word = tokenized_sentences[i][j]
+            encodings.add_word(word)
+            unigram.add_word(encodings.get_index_confident(word))
+
+            tokenized_sentences[i][j] = word
+
     for sentence in tqdm(tokenized_sentences, desc='reading sentences'):
         sentence_length = len(sentence)
 
         for i in range(sentence_length):
-            word = sentence[i].lower()
+            word = sentence[i]
             encodings.add_word(word)
             word_index = encodings.get_index_confident(word)
+
+            if unigram.get_word_count(word_index) < config.minimum_count:
+                continue
 
             for j in range(i - window_size, i + window_size + 1):
                 if i == j:
@@ -67,4 +83,4 @@ def generate_indexed_data(tokenized_sentences, config, verbose=True):
                     x.append(encodings.get_index_confident(sentence[j]))
                     y.append(torch.tensor([word_index], dtype=torch.long))
     
-    return encodings, x, y
+    return encodings, unigram, x, y

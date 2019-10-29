@@ -12,11 +12,12 @@ from . import log
 class SkipGram():
     def __init__(self, config, sentences):
         self.config = config
-        
+
         if sentences != None:
-            encodings, x, y = generate_indexed_data(sentences, config)
+            encodings, unigram, x, y = generate_indexed_data(sentences, config)
 
             self.encodings = encodings
+            self.unigram = unigram
             self.x = x
             self.y = y
 

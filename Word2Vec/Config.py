@@ -24,3 +24,4 @@ class Config():
         self.unknown_word = '<UNK>'
 
         self.dtype = torch.float32
+        self.minimum_count = 1

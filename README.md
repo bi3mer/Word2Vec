@@ -2,11 +2,10 @@
 
 ## TODO
 
-* Can I optimize the error calculation?
-* Add loss function to print out
-* Add configuration for modulo print
-    * Optimize so loss and accuracy are only calculated on valid modulo
-* Improve naming of variables in backwards propagation and forward functions
+* remove uncommon words
+* Heiarachal softmax
+* Move to numpy completely, pytorch isn't fast enough and GPU isn't really usable here
+* Negative samples
 
 ## Samples
 
