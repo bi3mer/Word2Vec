@@ -21,9 +21,8 @@ corpus.append('the boy went to the store , and bought beef .'.split(' '))
 
 config = Word2Vec.Config()
 
-encodings, x, y = Word2Vec.generate_indexed_data(corpus, config)
-model = Word2Vec.SkipGram(config, encodings)
-model.train(x, y)
+model = Word2Vec.SkipGram(config, corpus)
+model.train()
 
 Word2Vec.IO.save_embeddings(model, 'embeddings_dir')
 Word2Vec.IO.save_model(model, 'model_dir')

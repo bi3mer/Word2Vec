@@ -39,9 +39,11 @@ def load_model(directory_path):
     w1 = load_pickle(os.path.join(directory_path, 'w1.pkl'))
     w2 = load_pickle(os.path.join(directory_path, 'w2.pkl'))
 
-    model = SkipGram(config, encodings)
+    model = SkipGram(config, None)
     model.w1 = w1
     model.w2 = w2
+    model.encodings = encodings
+    model.vocabulary_size = encodings.vocabulary_size()
 
     return model
 

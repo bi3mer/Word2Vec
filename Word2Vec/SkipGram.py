@@ -5,21 +5,30 @@ import torch
 from torch.autograd import Variable
 from torch.nn.functional import log_softmax, nll_loss
 
-from .GenerateData import encode_indexed_data_point
+from .GenerateData import encode_indexed_data_point, generate_indexed_data
 from .Config import Config
 from . import log
 
 class SkipGram():
-    def __init__(self, config, encodings):
-        self.encodings = encodings
+    def __init__(self, config, sentences):
         self.config = config
+        
+        if sentences != None:
+            encodings, x, y = generate_indexed_data(sentences, config)
 
-        self.vocabulary_size = encodings.vocabulary_size()
+            self.encodings = encodings
+            self.x = x
+            self.y = y
 
-        self.w1 = Variable(torch.randn(config.encoding_size, self.vocabulary_size, dtype=self.config.dtype), requires_grad=True)
-        self.w2 = Variable(torch.randn(self.vocabulary_size, config.encoding_size, dtype=self.config.dtype), requires_grad=True)
+            self.vocabulary_size = encodings.vocabulary_size()
+
+            self.w1 = Variable(torch.randn(config.encoding_size, self.vocabulary_size, dtype=self.config.dtype), requires_grad=True)
+            self.w2 = Variable(torch.randn(self.vocabulary_size, config.encoding_size, dtype=self.config.dtype), requires_grad=True)
     
-    def train(self, x, y):
+    def train(self):
+        x = self.x
+        y = self.y
+
         input_size = len(x)
         learning_rate = self.config.learning_rate
         dtype = self.config.dtype
