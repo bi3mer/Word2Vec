@@ -62,7 +62,7 @@ True
 
 ## Optimizations
 
-Current Best: 435.25it/s
+Current Best on Brown Corpus: 354.38it/s
 
 ### Array Construction for Encodings
 

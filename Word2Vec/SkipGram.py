@@ -16,19 +16,20 @@ class SkipGram():
 
         self.vocabulary_size = encodings.vocabulary_size()
 
-        self.w1 = Variable(torch.randn(config.encoding_size, self.vocabulary_size).float(), requires_grad=True)
-        self.w2 = Variable(torch.randn(self.vocabulary_size, config.encoding_size).float(), requires_grad=True)
+        self.w1 = Variable(torch.randn(config.encoding_size, self.vocabulary_size, dtype=self.config.dtype), requires_grad=True)
+        self.w2 = Variable(torch.randn(self.vocabulary_size, config.encoding_size, dtype=self.config.dtype), requires_grad=True)
     
     def train(self, x, y):
         input_size = len(x)
         learning_rate = self.config.learning_rate
+        dtype = self.config.dtype
 
         for epoch in range(self.config.epochs):
             correct_predictions = 0
             loss_value = 0
             
             for i in trange(input_size):
-                x_vector = encode_indexed_data_point(x[i], self.vocabulary_size)
+                x_vector = encode_indexed_data_point(x[i], dtype, self.vocabulary_size)
                 target = y[i]
 
                 output_1 = torch.matmul(self.w1, x_vector)

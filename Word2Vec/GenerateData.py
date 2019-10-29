@@ -5,7 +5,7 @@ from . import log
 from tqdm import tqdm
 import torch
 
-def encode_indexed_data_point(index, vocabulary_size):
+def encode_indexed_data_point(index, dtype, vocabulary_size):
     '''
     for every input X it returns an array of the vocabulary size where 1 of the
     values is 1 for the word it represents and the remaining values are 0
@@ -15,7 +15,7 @@ def encode_indexed_data_point(index, vocabulary_size):
     @type vocabulary_size: int
     @param vocabulary_size: total number of words found
     '''
-    indexed = torch.zeros(vocabulary_size)
+    indexed = torch.zeros(vocabulary_size, dtype=dtype)
     indexed[index] = 1
 
     return indexed
