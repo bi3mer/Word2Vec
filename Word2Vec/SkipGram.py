@@ -5,7 +5,7 @@ import torch
 from torch.autograd import Variable
 from torch.nn.functional import log_softmax, nll_loss
 
-from .GenerateData import encode_indexed_data_point
+from .GenerateData import encode_indexed_data_point, cuda_encode_indexed_data_point
 from .Config import Config
 from . import log
 
@@ -16,20 +16,25 @@ class SkipGram():
 
         self.vocabulary_size = encodings.vocabulary_size()
 
-        self.w1 = Variable(torch.randn(config.encoding_size, self.vocabulary_size, dtype=self.config.dtype), requires_grad=True)
-        self.w2 = Variable(torch.randn(self.vocabulary_size, config.encoding_size, dtype=self.config.dtype), requires_grad=True)
+        if torch.cuda.is_available:
+            self.encode = cuda_encode_indexed_data_point
+            self.w1 = Variable(torch.randn(config.encoding_size, self.vocabulary_size, device='cuda'), requires_grad=True)
+            self.w2 = Variable(torch.randn(self.vocabulary_size, config.encoding_size, device='cuda'), requires_grad=True)
+        else:
+            self.encode(encode_indexed_data_point)
+            self.w1 = Variable(torch.randn(config.encoding_size, self.vocabulary_size), requires_grad=True)
+            self.w2 = Variable(torch.randn(self.vocabulary_size, config.encoding_size), requires_grad=True)
     
     def train(self, x, y):
         input_size = len(x)
         learning_rate = self.config.learning_rate
-        dtype = self.config.dtype
 
         for epoch in range(self.config.epochs):
             correct_predictions = 0
             loss_value = 0
             
             for i in trange(input_size):
-                x_vector = encode_indexed_data_point(x[i], dtype, self.vocabulary_size)
+                x_vector = self.encode(x[i], self.vocabulary_size)
                 target = y[i]
 
                 output_1 = torch.matmul(self.w1, x_vector)

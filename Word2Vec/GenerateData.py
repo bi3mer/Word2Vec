@@ -5,31 +5,21 @@ from . import log
 from tqdm import tqdm
 import torch
 
-def encode_indexed_data_point(index, dtype, vocabulary_size):
-    '''
-    for every input X it returns an array of the vocabulary size where 1 of the
-    values is 1 for the word it represents and the remaining values are 0
-
-    @type x: [int]
-    @param x: list of indexed training values
-    @type vocabulary_size: int
-    @param vocabulary_size: total number of words found
-    '''
-    indexed = torch.zeros(vocabulary_size, dtype=dtype)
+def encode_indexed_data_point(index, vocabulary_size):
+    indexed = torch.zeros(vocabulary_size)
     indexed[index] = 1
 
     return indexed
 
-def generate_indexed_data(tokenized_sentences, config, verbose=True):
-    '''
-    generates encoded data set for training based on tokenized sentences
+def cuda_encode_indexed_data_point(index, vocabulary_size):
+    indexed = torch.zeros(vocabulary_size, device='cuda')
+    indexed[index] = 1
 
-    @type tokenized_sentences: [[str]]
-    @param tokenized_sentences: list of tokenized sentences from corpus
-    @type config: Config
-    @param config: defined configuration file
-    @rtype: [[int]], [int]]
-    '''
+    return indexed
+
+
+
+def generate_indexed_data(tokenized_sentences, config, verbose=True):
     x = []
     y = []
     
