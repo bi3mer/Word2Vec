@@ -39,6 +39,9 @@ class WordEncodings():
 
         return self.word_to_int[word]
 
+    def get_index_confident(self, word):
+        return self.word_to_int[word]
+
     def vocabulary_size(self):
         return self.index
 

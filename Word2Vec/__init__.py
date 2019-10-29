@@ -1,5 +1,5 @@
 from .SkipGram import SkipGram
-from .GenerateData import generate_encoded_data
+from .GenerateData import generate_indexed_data, encode_indexed_data
 from .NearestNeighbor import NearestNeighbor
 from .Config import Config
 from . import IO

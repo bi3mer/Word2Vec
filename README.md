@@ -10,7 +10,7 @@
 
 ## Samples
 
-### Create a Model
+### Create a Small Model
 
 ```python
 import Word2Vec
@@ -20,7 +20,9 @@ corpus.append('i imagine the day that I can run again , and it will be brilliant
 corpus.append('the boy went to the store , and bought beef .'.split(' '))
 
 config = Word2Vec.Config()
-encodings, x, y = Word2Vec.generate_encoded_data(corpus, config)
+encodings, x, y = Word2Vec.generate_indexed_data(corpus, config)
+x = Word2Vec.encode_indexed_data(x, encodings.vocabulary_size())
+
 model = Word2Vec.SkipGram(config, encodings)
 model.train(x, y)
 

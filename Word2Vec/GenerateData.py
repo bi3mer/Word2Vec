@@ -14,15 +14,23 @@ def encode_indexed_data(x, vocabulary_size):
     @param vocabulary_size: total number of words found
     '''
     new_x = []
+    length = len(x)
+    bar = tqdm(total=length, desc='encoding indexed data')
 
-    for index in tqdm(x, desc='encoding indexed data'):
+    while length > 0:
+        length -= 1
+        index = x.pop()
+        bar.update(1)
+        
         new_val = np.zeros(vocabulary_size, dtype=int)
         new_val[index] = 1
         new_x.append(new_val)
 
+        del index
+
     return np.array(new_x)
 
-def generate_encoded_data(tokenized_sentences, config, verbose=True):
+def generate_indexed_data(tokenized_sentences, config, verbose=True):
     '''
     generates encoded data set for training based on tokenized sentences
 
@@ -39,18 +47,18 @@ def generate_encoded_data(tokenized_sentences, config, verbose=True):
     encodings.add_word(config.start_of_sentence_token)
     encodings.add_word(config.end_of_sentence_token)
 
-    start_of_sentence_index = encodings.get_index(config.start_of_sentence_token)
-    end_of_sentence_index = encodings.get_index(config.end_of_sentence_token)
+    start_of_sentence_index = encodings.get_index_confident(config.start_of_sentence_token)
+    end_of_sentence_index = encodings.get_index_confident(config.end_of_sentence_token)
 
     window_size = config.window_size
 
-    for sentence in tqdm(tokenized_sentences, desc='reading sentences'):
+    for sentence in tqdm(tokenized_sentences, desc='reading sentences    '):
         sentence_length = len(sentence)
 
         for i in range(sentence_length):
             word = sentence[i]
             encodings.add_word(word)
-            word_index = encodings.get_index(word)
+            word_index = encodings.get_index_confident(word)
 
             for j in range(i - window_size, i + window_size + 1):
                 if i == j:
@@ -66,7 +74,7 @@ def generate_encoded_data(tokenized_sentences, config, verbose=True):
                         y.append(word_index)
                 else:
                     encodings.add_word(sentence[j])
-                    x.append(encodings.get_index(sentence[j]))
+                    x.append(encodings.get_index_confident(sentence[j]))
                     y.append(word_index)
     
-    return encodings, encode_indexed_data(x, encodings.vocabulary_size()), np.array(y)
+    return encodings, x, np.array(y)
